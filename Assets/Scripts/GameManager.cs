@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 	public GameObject menuPanel;
 	public Image progressBar;
 
-	// Menu system with pizza names
 	private int currentMenuIndex = 0;
 	private Menu[] menus = new Menu[]
 	{
@@ -34,7 +33,7 @@ public class GameManager : MonoBehaviour
 		new Menu("Deluxe Cheese", 5000, 4000)
 	};
 
-	private float autoSaveInterval = 15f; // 15 seconds auto-save interval
+	private float autoSaveInterval = 15f;
 	private float timer;
 
 	void Awake()
@@ -48,12 +47,11 @@ public class GameManager : MonoBehaviour
 			Destroy(gameObject);
 		}
 
-		LoadGame(); // Load saved data when the game starts
+		LoadGame();
 	}
 
 	private void Start()
 	{
-		// Assign button listeners
 		hawaBtn.onClick.AddListener(SelectHawaiian);
 		meatBtn.onClick.AddListener(SelectMeatSupreme);
 		deluxBtn.onClick.AddListener(SelectDeluxeCheese);
@@ -84,7 +82,6 @@ public class GameManager : MonoBehaviour
 		int clickIncrease = Mathf.FloorToInt(clickPower);
 		clickCount += clickIncrease;
 
-		// Check if clickCount exceeds maxClick for the current menu
 		if (clickCount >= menus[currentMenuIndex].clickThreshold)
 		{
 			int overflow = clickCount - menus[currentMenuIndex].clickThreshold;
@@ -131,13 +128,11 @@ public class GameManager : MonoBehaviour
 		upgradeBtn.interactable = coin >= upgradeCost;
 	}
 
-	// Switch menu manually by clicking buttons
 	public void SelectHawaiian()
 	{
 		currentMenuIndex = 0;
-		clickCount = 0; // Reset progress
+		clickCount = 0;
 		UpdateUI();
-		Debug.Log("Switched to Hawaiian");
 	}
 
 	public void SelectMeatSupreme()
@@ -145,7 +140,6 @@ public class GameManager : MonoBehaviour
 		currentMenuIndex = 1;
 		clickCount = 0;
 		UpdateUI();
-		Debug.Log("Switched to Meat Supreme");
 	}
 
 	public void SelectDeluxeCheese()
@@ -153,7 +147,6 @@ public class GameManager : MonoBehaviour
 		currentMenuIndex = 2;
 		clickCount = 0;
 		UpdateUI();
-		Debug.Log("Switched to Deluxe Cheese");
 	}
 
 	public void BuyMeatSupreme()
@@ -179,7 +172,6 @@ public class GameManager : MonoBehaviour
 		menuPanel.gameObject.SetActive(!menuPanel.gameObject.activeSelf);
 	}
 
-	// Auto-save every 15 seconds
 	private void AutoSave()
 	{
 		PlayerPrefs.SetInt("Coin", coin);
@@ -188,21 +180,12 @@ public class GameManager : MonoBehaviour
 		PlayerPrefs.SetInt("UpgradeCost", upgradeCost);
 		PlayerPrefs.SetInt("CurrentMenuIndex", currentMenuIndex);
 
-		// Save button states
 		PlayerPrefs.SetInt("MeatBuyBtnActive", meatBuyBtn.gameObject.activeSelf ? 1 : 0);
 		PlayerPrefs.SetInt("DeluxBuyBtnActive", deluxBuyBtn.gameObject.activeSelf ? 1 : 0);
 
-		PlayerPrefs.Save(); // Make sure to save it to disk
-
-		// Debug message to confirm auto-save
-		Debug.Log("Game auto-saved at: " + Time.time + " seconds\n" +
-				  "Coins: " + coin + ", Click Power: " + clickPower + ", Click Count: " + clickCount +
-				  ", Upgrade Cost: " + upgradeCost + ", Menu Index: " + currentMenuIndex);
+		PlayerPrefs.Save();
 	}
 
-
-
-	// Load game data
 	private void LoadGame()
 	{
 		if (PlayerPrefs.HasKey("Coin"))
@@ -213,20 +196,17 @@ public class GameManager : MonoBehaviour
 			upgradeCost = PlayerPrefs.GetInt("UpgradeCost");
 			currentMenuIndex = PlayerPrefs.GetInt("CurrentMenuIndex");
 
-			// Load button states
 			bool isMeatBuyBtnActive = PlayerPrefs.GetInt("MeatBuyBtnActive") == 1;
 			bool isDeluxBuyBtnActive = PlayerPrefs.GetInt("DeluxBuyBtnActive") == 1;
 			meatBuyBtn.gameObject.SetActive(isMeatBuyBtnActive);
 			deluxBuyBtn.gameObject.SetActive(isDeluxBuyBtnActive);
 
 			UpdateUI();
-			Debug.Log("Game data loaded");
 		}
 	}
 
 	public void NewGame()
 	{
-		// Reset all variables to their initial values
 		coin = 0;
 		clickPower = 1f;
 		clickCount = 0;
@@ -234,19 +214,13 @@ public class GameManager : MonoBehaviour
 		firstUpgrade = true;
 		currentMenuIndex = 0;
 
-		// Reset button states
 		meatBuyBtn.gameObject.SetActive(true);
 		deluxBuyBtn.gameObject.SetActive(true);
 
-		// Update the UI
 		UpdateUI();
-
-		// Debug message to confirm new game reset
-		Debug.Log("New game started. All progress has been reset.");
 	}
 }
 
-// Menu class to store menu info
 public class Menu
 {
 	public string name;

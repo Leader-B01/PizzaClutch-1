@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;  // For Button and UI checks
-using UnityEngine.EventSystems; // For checking if the click was on UI
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Interact : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class Interact : MonoBehaviour
 	private InputAction fire;
 	public Animator animator;
 	private GameManager gameManager;
-	public Button upgradeBtn;  // Reference to the Upgrade button
+	public Button upgradeBtn;
 
 	void Awake()
 	{
@@ -36,7 +36,6 @@ public class Interact : MonoBehaviour
 
 	void Update()
 	{
-		// Only increment the click count if the click wasn't on a button
 		if (fire.WasPressedThisFrame() && !IsClickOnUIButton())
 		{
 			animator.SetBool("IsPush", true);
@@ -51,10 +50,8 @@ public class Interact : MonoBehaviour
 		}
 	}
 
-	// Checks if the click is specifically on a button
 	private bool IsClickOnUIButton()
 	{
-		// Return true if the click is specifically on a UI Button
 		return EventSystem.current.IsPointerOverGameObject() &&
 			   EventSystem.current.currentSelectedGameObject != null &&
 			   EventSystem.current.currentSelectedGameObject.GetComponent<Button>() != null;
